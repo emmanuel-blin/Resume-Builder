@@ -4,8 +4,6 @@ import {useNavigate} from "react-router-dom";
 import Loading from "./Loading";
 import axios from "axios";
 
-const API_KEY = process.env.REACT_APP_API_KEY;
-console.log(API_KEY);
 
 const Home = () => {
    const [fullName, setFullName] = useState("");
