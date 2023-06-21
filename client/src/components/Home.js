@@ -10,8 +10,9 @@ const Home = () => {
    const [currentTechnologies, setCurrentTechnologies] = useState("");
    const [headshot, setHeadshot] = useState(null);
    const [loading, setLoading] = useState(false);
+   const [companyInfo, setCompanyInfo] = useState([{name:"", position:""}]);
 
-   const handleFormSubmit = (e) => { 
+   const handleFormSubmit = (e) => {
       e.preventDefault();
       console.log({
          fullName,
@@ -23,6 +24,24 @@ const Home = () => {
       setLoading(true);
    }
 
+   // Updates the states of companies with user's input
+   const handleAddCompany = () =>
+   setCompanyInfo([...companyInfo, {name:"", position:""}]);
+
+   // Removes a selected item from the list of companies
+   const handleRemoveCompany = (index) => {
+      const list = [...companyInfo];
+      list.splice(index, 1);
+      setCompanyInfo(list);
+   };
+
+   // Updates an item within the the list of companies
+   const handleUpdateCompany = (e, index) => {
+      const { name, value } = e.target;
+      const list = [...companyInfo];
+      list[index][name] = value;
+      setCompanyInfo(list);
+    };
 
 
 if (loading) {
@@ -99,6 +118,42 @@ return (
                         onChange={(e) => setHeadshot(e.target.value)}
                   />
                </div>
+               <h3>Companies you've worked at</h3>
+               {companyInfo.map((company, index) => (
+
+                  <div className="nestedContainer" key={index}>
+
+                     <div className="companies">
+                        <label htmlFor="name">Company name</label>
+                        <input
+                              type="text"
+                              name="name"
+                              required
+                              onChange={(e) => handleUpdateCompany(e, index)}
+                        />
+                     </div>
+
+                     <div className="companies">
+                        <label htmlFor="position">Position held</label>
+                        <input
+                              type="text"
+                              name="position"
+                              required
+                              onChange={(e) => handleUpdateCompany(e, index)}
+                        />
+                     </div>
+
+                     <div className="btn__group">
+                        {companyInfo.length - 1 === index && companyInfo.length < 4 && (
+                           <button id="addBtn" >Add</button>
+                        )}
+                        {companyInfo.length > 1 && (
+                           <button id="deleteBtn">Del</button>
+                        )}
+                     </div>
+                  </div>
+
+               ))}
 
                <button>Create Resume</button>
 
