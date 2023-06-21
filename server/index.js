@@ -1,9 +1,14 @@
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const app = express();
 const PORT = 4000;
+
+console.log(__dirname);
+const API_KEY = process.env.REACT_APP_API_KEY;
+console.log(API_KEY);
 
 app.use(express.urlencoded( { extended: true} ));
 app.use(express.json());
