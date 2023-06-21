@@ -5,7 +5,7 @@ import Loading from "./Loading";
 import axios from "axios";
 
 
-const Home = () => {
+const Home = ({setResult}) => {
    const [fullName, setFullName] = useState("");
    const [currentPosition, setCurrentPosition] = useState("");
    const [currentLength, setCurrentLength] = useState("");
@@ -15,30 +15,7 @@ const Home = () => {
    const [companyInfo, setCompanyInfo] = useState([{name:"", position:""}]);
    const navigate = useNavigate();
 
-   const handleFormSubmit = (e) => {
-      e.preventDefault();
-
-      const formData = new FormData();
-      formData.append("headshotImage", headshot, headshot.name);
-      formData.append("fullName", fullName);
-      formData.append("currentPosition", currentPosition);
-      formData.append("currentLength", currentLength);
-      formData.append("currentTechnologies", currentTechnologies);
-      formData.append("workHistory", JSON.stringyfy(companyInfo));
-
-      axios
-         .post("http://localhost:4000/resume/create", formData, {})
-         .then((res) => {
-            if(res.data.message) {
-               console.log(res.data.data);
-               navigate("/resume");
-            }
-         })
-         .catcg((err) => console.error(err));
-
-      setLoading(true);
-   }
-
+   
    // Updates the states of companies with user's input
    const handleAddCompany = () =>
    setCompanyInfo([...companyInfo, {name:"", position:""}]);
@@ -58,6 +35,31 @@ const Home = () => {
       setCompanyInfo(list);
     };
 
+    const handleFormSubmit = (e) => {
+      e.preventDefault();
+
+      const formData = new FormData();
+		formData.append("headshotImage", headshot, headshot.name);
+		formData.append("fullName", fullName);
+		formData.append("currentPosition", currentPosition);
+		formData.append("currentLength", currentLength);
+		formData.append("currentTechnologies", currentTechnologies);
+		formData.append("workHistory", JSON.stringify(companyInfo));
+
+      axios
+         .post("http://localhost:4000/resume/create", formData, {})
+         .then((res) => {
+            if(res.data.message) {
+               setResult(res.data.data);
+               navigate("/resume");
+            }
+         })
+         .catch((err) => console.error(err));
+
+      setLoading(true);
+   };
+
+
 
 if (loading) {
    return <Loading />
@@ -65,7 +67,7 @@ if (loading) {
 
 
 
-return ( 
+return (
    <div className="app">
       <h1>Resume Builder</h1>
       <p>Generate a resume with ChatGPT in a few seconds</p>
@@ -130,7 +132,7 @@ return (
                         // required
                         id="photo"
                         accept="image/x-png,image/jpeg"
-                        onChange={(e) => setHeadshot(e.target.value)}
+                        onChange={(e) => setHeadshot(e.target.files[0])}
                   />
                </div>
                <h3>Companies you've worked at</h3>

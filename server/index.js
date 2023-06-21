@@ -9,18 +9,15 @@ const PORT = 4000;
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
-
+//  TODO, figure out why API key is not working !!, seems to be the only problem so far 
 app.use(express.urlencoded( { extended: true} ));
 app.use(express.json());
 app.use(cors());
 // Multer Config
-app.use("/uploads", express.static("uploads")); // Enables Node.js to serve the content from "./Uploads" 
+app.use("/uploads", express.static("uploads")); // Enables Node.js to serve the content from "./Uploads"
 
-app.get("/api", (req, res) => {
-   res.json({
-      message: "Hello World",
-   });
-});
+
+const generateID = () => Math.random().toString(36).substring(2, 10);
 
 
 const storage = multer.diskStorage({
@@ -39,7 +36,7 @@ const upload = multer({
 
 
 const configuration = new Configuration({
-   API_KEY,
+  apiKey: API_KEY,
 });
 
 const openai = new OpenAIApi(configuration);
