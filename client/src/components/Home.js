@@ -127,7 +127,7 @@ return (
                   <input
                         type="file"
                         name="photo"
-                        required
+                        // required
                         id="photo"
                         accept="image/x-png,image/jpeg"
                         onChange={(e) => setHeadshot(e.target.value)}
